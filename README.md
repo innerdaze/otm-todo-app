@@ -30,6 +30,8 @@ yarn start
 
 Visit http://localhost:3000/ in the browser if it is not launched automatically.
 
+Launch multiple instances to view the realtime updates.
+
 ## Testing
 
 ```sh
