@@ -40,9 +40,11 @@ yarn test
 
 - User Authentication
 - Socket.IO Testing
+- e2e Testing
 - Multiple Todo Lists
 - Error Handling
 - Security (WSS)
+- Offline Mode
 
 ## Known Issues
 
