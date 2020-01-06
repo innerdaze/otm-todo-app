@@ -47,6 +47,7 @@ yarn test
 - Error Handling
 - Security (WSS)
 - Offline Mode
+- PropTypes...
 
 ## Known Issues
 
