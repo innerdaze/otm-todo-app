@@ -1,26 +1,27 @@
 import React from 'react'
 import { render } from '@testing-library/react'
-import { ThemeProvider } from 'theme-ui'
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'connected-react-router'
 import history from './history'
-import { store } from './store/store'
-import theme from '@rebass/preset'
+import { createStore, createStoreWithState } from './store/store'
 
-const Providers = ({ children }) => {
-  return (
-    <Provider store={store}>
-      <ConnectedRouter history={history}>
-        {/* <ThemeProvider theme={theme}> */}
-        {children}
-        {/* </ThemeProvider> */}
-      </ConnectedRouter>
-    </Provider>
-  )
-}
+const Providers = ({ children }) => (
+  <Provider store={createStore()}>
+    <ConnectedRouter history={history}>{children}</ConnectedRouter>
+  </Provider>
+)
 
-const customRender = (ui, options) =>
-  render(ui, { wrapper: Providers, ...options })
+const ProvidersWithCustomState = state => ({ children }) => (
+  <Provider store={createStoreWithState(state)}>
+    <ConnectedRouter history={history}>{children}</ConnectedRouter>
+  </Provider>
+)
+
+const customRender = (ui, options, state) =>
+  render(ui, {
+    wrapper: state ? ProvidersWithCustomState(state) : Providers,
+    ...options
+  })
 
 // re-export everything
 export * from '@testing-library/react'

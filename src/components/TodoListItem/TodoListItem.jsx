@@ -1,22 +1,37 @@
 import React, { useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Table, Icon, IconButton } from 'evergreen-ui'
-import { actions, byId } from '../../features/todos/'
+import { Table, Button, Icon } from 'evergreen-ui'
+import { byId, thunks } from '../../features/todos/'
 
-export default React.memo(({ id }) => {
-  const todo = useSelector(byId)[id]
+export default React.memo(({ dataId }) => {
+  const todo = useSelector(byId)[dataId]
   const dispatch = useDispatch()
 
-  // const handleButtonClick = useCallback(
-  //   () => dispatch(actions.toggleTodo(id)),
-  //   [dispatch, id]
-  // )
+  const handleCompleteClick = useCallback(
+    e => {
+      e.stopPropagation()
+      dispatch(thunks.toggleTodoAndSync(dataId))
+    },
+    [dataId, dispatch]
+  )
 
   return (
     <>
-      <Table.TextCell>{todo.id}</Table.TextCell>
-      <Table.TextCell>{todo.text}</Table.TextCell>
-      <Table.Cell>{todo.completed && <Icon icon="tick" />}</Table.Cell>
+      <Table.TextCell data-testid="todoListItem-cell-1">
+        {todo.text}
+      </Table.TextCell>
+      <Table.Cell data-testid="todoListItem-cell-2" justifyContent="flex-end">
+        {todo.completed ? (
+          <Icon data-testid="todoListItem-icon" icon="tick" color="green" />
+        ) : (
+          <Button
+            data-testid="todoListItem-button"
+            onClick={handleCompleteClick}
+          >
+            Complete
+          </Button>
+        )}
+      </Table.Cell>
     </>
   )
 })

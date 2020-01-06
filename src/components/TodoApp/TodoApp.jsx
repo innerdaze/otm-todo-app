@@ -1,44 +1,30 @@
-import React, { useState, useCallback } from 'react'
-import { Box, Flex } from 'rebass'
-import { majorScale, Pane, Heading, Position } from 'evergreen-ui'
-// import { Grid, Segment, Container, Header } from 'semantic-ui-react'
+import React, { useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
+import { Button } from 'evergreen-ui'
 import TodoList from '../TodoList'
-import EditTodoForm from '../EditTodoForm'
+import TodoAppLayout from '../TodoAppLayout'
 
 export default () => {
-  const [currentlyEditing, setCurrentlyEditing] = useState(null)
-  const [isCreating, setIsCreating] = useState(false)
+  const history = useHistory()
 
-  const handleRowSelect = useCallback(setCurrentlyEditing, [])
+  const handleRowSelect = useCallback(
+    data => history.push(`/edit/${data.id}`),
+    [history]
+  )
+
+  const handleAddTodoClick = useCallback(() => history.push('/add'), [history])
 
   return (
-    <>
-      {/* <AddTodoForm
-        isShown={isCreating}
-        position={Position.TOP}
-      /> */}
-      <EditTodoForm
-        isShown={Boolean(currentlyEditing)}
-        data={currentlyEditing}
-        position={Position.TOP}
-      />
-      <Flex
-        flexDirection="column"
-        alignItems="center"
-        height="100vh"
-        padding={majorScale(5)}
-        width={[1]}
-      >
-        <Box width={[1, 1, 1 / 2]}>
-          <Pane>
-            <Heading>Title</Heading>
-            <div>Select Todo</div>
-            <div>Add Todo</div>
-            <TodoList onRowSelect={handleRowSelect} />
-            <div>Total</div>
-          </Pane>
-        </Box>
-      </Flex>
-    </>
+    <TodoAppLayout
+      title="Todos"
+      headerAction={
+        <Button appearance="primary" onClick={handleAddTodoClick}>
+          Add Todo
+        </Button>
+      }
+    >
+      {/* <div>Select Todo</div> */}
+      <TodoList onRowSelect={handleRowSelect} />
+    </TodoAppLayout>
   )
 }

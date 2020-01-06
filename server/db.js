@@ -1,9 +1,18 @@
-import PouchDB from 'pouchdb'
-import expressPouchDB from 'express-pouchdb'
+import loki from 'lokijs'
 
-const TempPouchDB = PouchDB.defaults({
-  prefix: '/tmp/'
-})
+export const initializeDB = cb => {
+  const autoloadCallback = () => {
+    if (!db.getCollection('todos')) {
+      db.addCollection('todos', { unique: 'id' })
+    }
 
-export default expressPouchDB(TempPouchDB)
-export const dbInstance = new TempPouchDB('db')
+    cb(db)
+  }
+
+  const db = new loki('todos.db', {
+    autoload: true,
+    autoloadCallback: autoloadCallback,
+    autosave: true,
+    autosaveInterval: 4000
+  })
+}

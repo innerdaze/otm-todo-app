@@ -1,37 +1,35 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { SideSheet, Button, TextInput } from 'evergreen-ui'
-import { byId, updateTodo } from '../../features/todos'
+import { byId, thunks } from '../../features/todos'
+import TodoAppLayout from '../TodoAppLayout'
+import BackButton from '../BackButton'
+import TodoFormLayout from '../TodoFormLayout'
 
-const EditTodoForm = ({ position, isShown, onCloseComplete, dataId }) => {
-  console.log('dataId', dataId)
+const EditTodoForm = ({ onSave = Function.prototype, dataId }) => {
   const todo = useSelector(byId)[dataId] || {}
-  const [todoText, setTodoText] = useState(todo.text)
   const dispatch = useDispatch()
 
-  const handleTextFieldChange = useCallback(
-    e => setTodoText(e.target.value),
-    []
+  const handleSaveButtonClick = useCallback(
+    data => {
+      dispatch(thunks.updateTodoAndSync({ ...todo, ...data }))
+      onSave()
+    },
+    [dispatch, onSave, todo]
   )
 
-  const handleButtonClick = useCallback(
-    () => dispatch({ id: dataId, text: todoText }),
-    [dataId, dispatch, todoText]
-  )
+  const handleDeleteButtonClick = useCallback(() => {
+    dispatch(thunks.removeTodoAndSync(dataId))
+    onSave()
+  }, [dataId, dispatch, onSave])
 
   return (
-    <SideSheet
-      position={position}
-      isShown={isShown}
-      onCloseComplete={onCloseComplete}
-    >
-      <TextInput
-        name="text"
-        onChange={handleTextFieldChange}
-        value={todoText}
+    <TodoAppLayout title="Edit Todo" headerAction={<BackButton />}>
+      <TodoFormLayout
+        onSaveClick={handleSaveButtonClick}
+        onDeleteClick={handleDeleteButtonClick}
+        formData={todo}
       />
-      <Button onClick={handleButtonClick} />
-    </SideSheet>
+    </TodoAppLayout>
   )
 }
 

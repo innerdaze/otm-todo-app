@@ -13,11 +13,12 @@ const TodoList = React.memo(({ onRowSelect }) => {
         {todos.map(todo => (
           <Table.Row
             key={todo.id}
+            data-testid={`todoListItem-${todo.id}`}
             disabled={todo.completed}
             isSelectable
             onSelect={() => onRowSelect(todo)}
           >
-            <Todo key={todo.id} id={todo.id} />
+            <Todo key={todo.id} dataId={todo.id} />
           </Table.Row>
         ))}
       </Table.Body>

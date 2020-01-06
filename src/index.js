@@ -1,29 +1,27 @@
-import 'semantic-ui-css/semantic.min.css'
 import React from 'react'
 import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'connected-react-router'
-import { PersistGate } from 'redux-persist/integration/react'
 import './index.css'
-import App from './components/App'
+import TodoSwitch from './components/TodoSwitch'
 import * as serviceWorker from './serviceWorker'
 import history from './history'
-import { store, persistor } from './store/store'
+import { createStore } from './store/store'
+
+const store = createStore()
 
 const renderWithHotReload = () =>
   render(
     <Provider store={store}>
-      {/* <PersistGate loading={<div>Loading...</div>} persistor={persistor}> */}
       <ConnectedRouter history={history}>
-        <App />
+        <TodoSwitch />
       </ConnectedRouter>
-      {/* </PersistGate> */}
     </Provider>,
     document.getElementById('root')
   )
 
 if (process.env.NODE_ENV !== 'production' && module.hot) {
-  module.hot.accept('./components/App', renderWithHotReload())
+  module.hot.accept('./components/TodoSwitch', renderWithHotReload())
 }
 
 renderWithHotReload()
