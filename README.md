@@ -22,6 +22,14 @@ yarn pm2:logs
 yarn start
 ```
 
+Visit http://localhost:3000/ in the browser if it is not launched automatically.
+
+## Testing
+
+```sh
+yarn test
+```
+
 ## Roadmap
 
 - User Authentication
