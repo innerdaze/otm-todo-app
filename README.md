@@ -1,5 +1,9 @@
 ## Installation
 
+```sh
+yarn
+```
+
 ### Server
 
 ```sh
